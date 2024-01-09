@@ -34,15 +34,15 @@ readdirSync('./src/router').map((file) => app.use('/api/v1', require(`./src/rout
 
 
 
-const password = process.env.DATABASE_PASS;
-const username = process.env.DATABASE_USER;
+// const password = process.env.DATABASE_PASS;
+// const username = process.env.DATABASE_USER;
 
-const url = "mongodb+srv://<username>:<password>@cluster0.opjq5jn.mongodb.net/myToDoApplication";
-const Options = {user: username, pass: password, autoIndex: true}
+// const url = "mongodb+srv://<username>:<password>@cluster0.opjq5jn.mongodb.net/myToDoApplication";
+// const Options = {user: username, pass: password, autoIndex: true}
 
 
 mongoose
-  .connect(url, Options)
+  .connect(process.env.DATA_PATH)
   .then(() => {
     console.log(`database Connection established successful`);
   })
