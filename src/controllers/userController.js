@@ -34,7 +34,7 @@ exports.Sining = async(req, res) => {
 
 
     // send email notification------------------
-    let EmailText = `Hi ${name} Welcome to myToDoApplication \nEmail Verification Code is \n\n${code} \n \n\nThanks for signing`;
+    // let EmailText = `Hi ${name} Welcome to myToDoApplication \nEmail Verification Code is \n\n${code} \n \n\nThanks for signing`;
    
     const hashedPassword = await hashPassword(password)
    
@@ -48,7 +48,7 @@ exports.Sining = async(req, res) => {
       admin,
     }).save();
 
-    await SendEmailUtility(email, EmailText, "Email Verification Code");
+    // await SendEmailUtility(email, EmailText, "Email Verification Code");
 
 
     const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, {
