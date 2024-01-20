@@ -14,19 +14,31 @@ exports.Sining = async(req, res) => {
     const { name, password, email, admin} = req.body;
 
     if (!name) {
-      return res.json({ error: "name is required" });
+      return res.json({
+        "success": false,
+        error: "name is required"
+      });
     }
     if (!password && password.length<7) {
-      return res.json({ error: "Password must be getter then 7 Character" });
+      return res.json({
+        "success": false,
+        error: "Password must be getter then 7 Character"
+      });
     }
     if (!email) {
-      return res.json({ error: "Email is required" });
+      return res.json({
+        "success": false,
+        error: "Email is required"
+      });
     }
 
     const existsUser = await userModel.findOne({email});
 
     if (existsUser) {
-      return res.status(409).json({ error: "User already exists"})
+      return res.status(409).json({
+        "success": false,
+        error: "User already exists"
+      })
     }
 
     const code = Math.floor(100000 + Math.random() * 900000);
@@ -56,6 +68,7 @@ exports.Sining = async(req, res) => {
     })
 
     res.json({
+      "success": true,
       user,
       token: token,
     })
@@ -63,7 +76,10 @@ exports.Sining = async(req, res) => {
   
 
   } catch (error) {
-    res.json({ error: "user Sining failed and Error: "+error})
+    res.json({
+      "success": false,
+      error: "user Sining failed and Error: " + error
+    })
   }
 }
 
@@ -85,12 +101,14 @@ exports.verifyUser = async (req, res) => {
     if (user === 1) {
       const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY, { expiresIn: '7d' });
       res.json({
+        "success": true,
         user: userDetails,
         token: token,
 
       })
     } else {
       res.json({
+        "success": false,
         "massage": "User invalid and invalid Otp",
         "error": "User verification failed"
       })
