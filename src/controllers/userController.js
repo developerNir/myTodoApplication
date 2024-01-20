@@ -89,7 +89,10 @@ exports.verifyUser = async (req, res) => {
     const { email, otp } = req.params;
 
     if (!email && !otp) {
-      return res.json({ error: "Please ensure your Valid information" });
+      return res.json({
+        "success": false,
+        error: "Please ensure your Valid information"
+      });
     }
 
 
@@ -124,6 +127,7 @@ exports.deleteAccount = async (req, res) => {
     const userCanTodo = await todoModel.findOne({ user: req.user._id });
     if (userCanTodo) {
       return res.json({
+        "success": false,
         "massage": "delete Created Todo before account Delete",
         error: "this User has information in database",
       })
@@ -132,18 +136,25 @@ exports.deleteAccount = async (req, res) => {
     const userFind = await userModel.findOne({_id: req.user._id });
 
     if (!userFind) {
-      return res.json({ error: "user dose not  exists"})
+      return res.json({
+        "success": false,
+        error: "user dose not  exists"
+      })
     }
 
     const userDeleted = await userModel.findByIdAndDelete(req.user._id);
 
     res.json({
+      "success": true,
       "massage": "User Delete Success",
       "data": userDeleted,
     })
 
 
   } catch (error) {
-    res.json({ error: "User verification failed Account deletion failed and error : "+error})
+    res.json({
+      "success": false,
+      error: "User verification failed Account deletion failed and error : " + error
+    })
   }
 }

@@ -11,7 +11,10 @@ exports.loginRequire =(req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(404).json({error: `${error}`});
+    return res.status(404).json({
+      "success": false,
+      error: `${error}`
+    });
   }
 }
 
@@ -22,11 +25,18 @@ exports.isAdmin = async(req, res, next) => {
     const user = await userModel.findById(req.user._id)
 
     if (user.role !== "1") {
-      res.status(404).json({error: "authorization error", message: "You are not Admin"})
+      res.status(404).json({
+        "success": false,
+        error: "authorization error",
+        message: "You are not Admin"
+      })
     } else {
       next();
     }
   } catch (error) {
-    res.json({ error: error.message });
+    res.json({
+      "success": true,
+      error: error.message
+    });
   }
 }
