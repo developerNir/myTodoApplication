@@ -10,13 +10,25 @@ exports.create = async (req, res) => {
 
     switch (true) {
       case !title: 
-        return res.json({ error: "Title is required" });
+        return res.json({
+          "success": false,
+          error: "Title is required"
+        });
       case !description:
-        return res.json({ error: "Description is required" });
+        return res.json({
+          "success": false,
+          error: "Description is required"
+        });
       case !priority:
-        return res.json({ error: "Priority is required" });
+        return res.json({
+          "success": false,
+          error: "Priority is required"
+        });
       case !setTime:
-        return res.json({ error: "SetTime is required" });
+        return res.json({
+          "success": false,
+          error: "SetTime is required"
+        });
     }
 
     const todo = await new todoModel({
@@ -29,12 +41,15 @@ exports.create = async (req, res) => {
 
 
     res.json({
-      "massage": "success",
+      "success": true,
       data: todo,
     })
 
   } catch (error) {
-    res.json({ error: "todo Create Failed and error: "+error})
+    res.json({
+      "success": false,
+      error: "todo Create Failed and error: " + error
+    })
   }
 }
 
@@ -46,13 +61,19 @@ exports.updateTodo = async (req, res) => {
     const { id, title, description, priority, setTime } = req.body;
 
     if (!id) {
-      return res.json({ "error": "id is required" });
+      return res.json({
+        "success": false,
+        "error": "id is required"
+      });
     }
 
     const todoExists = await todoModel.findOne({ _id: id });
 
     if (!todoExists) { 
-      return res.json({"error": "todo does not exist"})
+      return res.json({
+        "success": false,
+        "error": "todo does not exist"
+      })
     }
 
     const update = await todoModel.findByIdAndUpdate(
@@ -69,6 +90,7 @@ exports.updateTodo = async (req, res) => {
 
 
     res.json({
+      "success": true,
       update,
       "massage": "update successful",
     })
@@ -76,6 +98,7 @@ exports.updateTodo = async (req, res) => {
 
   } catch (error) {
     res.json({
+      "success": false,
       error: "todo Update Failed and error: " + error
     })
   }
@@ -95,17 +118,23 @@ exports.deleteTodo = async (req, res) => {
     const todo = await todoModel.findByIdAndDelete(id);
 
     if (!todo) {
-      return res.status(404).json({ error: "do not exist todo"})
+      return res.status(404).json({
+        "success": false,
+        error: "do not exist todo"
+      })
     }
 
     res.json({
-      "massage": "successful delete",
+      "success": true,
       data: todo,
       "notes": beNoteDelete
     })
 
   } catch (error) {
-    res.json({ error: "todo Delete Failed and error: "+error})
+    res.json({
+      "success": false,
+      error: "todo Delete Failed and error: " + error
+    })
   }
 }
 
@@ -116,7 +145,7 @@ exports.allToDos = async (req, res) => {
     const allTodo = await todoModel.find({ user: req.user._id });
 
     res.json({
-      "massage": true,
+      "success": true,
       data: {
         allTodo,
       }
@@ -125,7 +154,10 @@ exports.allToDos = async (req, res) => {
 
 
   } catch (error) {
-    res.json({ error: "request failed and error: " + error });
+    res.json({
+      "success": false,
+      error: "request failed and error: " + error
+    });
   }
 } 
 

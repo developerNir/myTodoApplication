@@ -5,10 +5,16 @@ exports.createNote =async(req, res) => {
     const { id, note } = req.body;
 
     if (!note) {
-      return res.json({ error: "Invalid note and note is required" });
+      return res.json({
+        "success": false,
+        error: "Invalid note and note is required"
+      });
     }
     if (!id) {
-      return res.json({ error: "Invalid note and id is required" });
+      return res.json({
+        "success": false,
+        error: "Invalid note and id is required"
+      });
     }
 
     const myNote = await new noteTodo({
@@ -19,13 +25,17 @@ exports.createNote =async(req, res) => {
 
 
     res.json({
+      "success": true,
       myNote,
     })
 
 
     
   } catch (error) {
-    res.json({error: "note Create failed and error: "+error})
+    res.json({
+      "success": false,
+      error: "note Create failed and error: " + error
+    })
   }
 }
 
@@ -36,22 +46,32 @@ exports.noteDelete = async (req, res) => {
     
     const {id} = req.params;
     if (!id) {
-      return res.json({ error: "invalid id and must be provided note id" });
+      return res.json({
+        "success": false,
+        error: "invalid id and must be provided note id"
+      });
     }
 
     const findNote = await noteTodo.findByIdAndDelete({ _id: id });
     
     if (findNote === null) {
-      return res.json({error: "note not found"})
+      return res.json({
+        "success": false,
+        error: "note not found"
+      })
     }
 
     res.json({
+      "success": true,
       "massage": "Delete successful",
       "data": findNote
     })
 
   } catch (error) {
-    res.json({error: "note Delete failed and error: "+error})
+    res.json({
+      "success": false,
+      error: "note Delete failed and error: " + error
+    })
   }
 }
 
@@ -62,13 +82,19 @@ exports.updateNote = async (req, res) => {
     const { id, note } = req.body;
     
     if (!id) {
-      return res.json({ error: "invalid Id and must be provided Id" });
+      return res.json({
+        "success": false,
+        error: "invalid Id and must be provided Id"
+      });
     }
 
     const myNoteExists = await noteTodo.findById({ _id: id });
 
     if (!myNoteExists) { 
-      return res.json({ error: "note not found" });
+      return res.json({
+        "success": false,
+        error: "note not found"
+      });
     }
 
     const NoteUpdate = await noteTodo.findByIdAndUpdate(
@@ -81,6 +107,7 @@ exports.updateNote = async (req, res) => {
     })
 
     res.json({
+      "success": true,
       "massage": "update successful",
       "data": NoteUpdate,
       "note": myNoteExists
@@ -88,6 +115,7 @@ exports.updateNote = async (req, res) => {
 
   } catch (error) {
     res.json({
+      "success": false,
       error: "note Update failed and error: "+error
     })
   }
@@ -100,16 +128,23 @@ exports.findAllNotes = async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) {
-      return res.json({ error: "Todo id required" });
+      return res.json({
+        "success": false,
+        error: "Todo id required"
+      });
     }
 
     const allNotes = await noteTodo.find({ todoId: id });
 
     if (!allNotes) { 
-      return res.json({ error: "do not create any notes eyt"})
+      return res.json({
+        "success": false,
+        error: "do not create any notes eyt"
+      })
     }
 
     res.json({
+      "success": true,
       "massage": "all notes",
       "data": allNotes,
     })
@@ -117,6 +152,9 @@ exports.findAllNotes = async (req, res) => {
 
 
   } catch (error) {
-    res.json({ error: "AllNotes failed and error: "+error})
+    res.json({
+      "success": false,
+      error: "AllNotes failed and error: " + error
+    })
   }
 }
