@@ -127,7 +127,6 @@ exports.deleteTodo = async (req, res) => {
     res.json({
       "success": true,
       data: todo,
-      "notes": beNoteDelete
     })
 
   } catch (error) {
